@@ -13,6 +13,12 @@ const state = {
 const $ = (id) => document.getElementById(id);
 const show = (el) => el.classList.remove("hidden");
 const hide = (el) => el.classList.add("hidden");
+const on = (id, type, handler) => {
+  const el = $(id);
+  if (!el) return null;
+  el.addEventListener(type, handler);
+  return el;
+};
 
 function toast(msg) {
   const t = $("toast");
@@ -110,7 +116,7 @@ function renderAuth() {
 }
 renderAuth();
 
-$("btnUnlock").addEventListener("click", async () => {
+on("btnUnlock", "click", async () => {
   state.adminToken = $("adminToken").value.trim();
   if (!state.adminToken) return toast("Token kosong ❌");
   localStorage.setItem("GHUB_ADMIN_TOKEN", state.adminToken);
@@ -119,7 +125,7 @@ $("btnUnlock").addEventListener("click", async () => {
   loadStats();
 });
 
-$("btnLock").addEventListener("click", () => {
+on("btnLock", "click", () => {
   state.adminToken = "";
   localStorage.removeItem("GHUB_ADMIN_TOKEN");
   renderAuth();
@@ -127,7 +133,7 @@ $("btnLock").addEventListener("click", () => {
   loadStats();
 });
 
-$("btnPing").addEventListener("click", async () => {
+on("btnPing", "click", async () => {
   const msg = $("sysMsg");
   if (msg) msg.textContent = "Testing API connection…";
   try {
@@ -160,7 +166,7 @@ function renderOutput() {
   });
 }
 
-$("btnGenerate").addEventListener("click", async () => {
+on("btnGenerate", "click", async () => {
   try {
     setBusy("genBusy", true);
     const plan = $("genPlan").value;
@@ -183,25 +189,25 @@ $("btnGenerate").addEventListener("click", async () => {
   }
 });
 
-$("btnClearOut").addEventListener("click", () => {
+on("btnClearOut", "click", () => {
   state.outputKeys = [];
   renderOutput();
   toast("Output cleared");
 });
 
-$("btnExportTxt").addEventListener("click", () => {
+on("btnExportTxt", "click", () => {
   if (!state.outputKeys.length) return toast("Output kosong");
   downloadFile("licenses.txt", state.outputKeys.join("\n"), "text/plain");
 });
 
-$("btnExportCsv").addEventListener("click", () => {
+on("btnExportCsv", "click", () => {
   if (!state.outputKeys.length) return toast("Output kosong");
   // sesuai EXE kamu: 1 key per baris
   downloadFile("licenses.csv", state.outputKeys.join("\n"), "text/csv");
 });
 
 // Quick actions
-$("btnQuickReset").addEventListener("click", async () => {
+on("btnQuickReset", "click", async () => {
   const license_key = $("quickKey").value.trim();
   if (!license_key) return toast("Isi license_key");
   try {
@@ -212,7 +218,7 @@ $("btnQuickReset").addEventListener("click", async () => {
   }
 });
 
-$("btnQuickBan").addEventListener("click", async () => {
+on("btnQuickBan", "click", async () => {
   const license_key = $("quickKey").value.trim();
   if (!license_key) return toast("Isi license_key");
   try {
@@ -458,14 +464,17 @@ function renderLicenses(items) {
   });
 }
 
-$("btnReload").addEventListener("click", loadLicenses);
+on("btnReload", "click", loadLicenses);
 
 // optional: debounce search
 let licTimer = null;
-$("licSearch").addEventListener("input", () => {
-  clearTimeout(licTimer);
-  licTimer = setTimeout(loadLicenses, 350);
-});
+const licSearchInput = $("licSearch");
+if (licSearchInput) {
+  licSearchInput.addEventListener("input", () => {
+    clearTimeout(licTimer);
+    licTimer = setTimeout(loadLicenses, 350);
+  });
+}
 
 // ====== Logs ======
 async function loadLogs() {
@@ -575,12 +584,12 @@ function renderLogs(items) {
   });
 }
 
-$("btnLogsSearch").addEventListener("click", () => {
+on("btnLogsSearch", "click", () => {
   state.logs.page = 1;
   loadLogs();
 });
 
-$("btnClearLogs").addEventListener("click", async () => {
+on("btnClearLogs", "click", async () => {
   const ok = confirm(
     "HAPUS SEMUA LOG?\n\nTindakan ini TIDAK bisa dibatalkan."
   );
@@ -596,13 +605,13 @@ $("btnClearLogs").addEventListener("click", async () => {
   }
 });
 
-$("btnLogsPrev").addEventListener("click", () => {
+on("btnLogsPrev", "click", () => {
   if (state.logs.page <= 1) return;
   state.logs.page -= 1;
   loadLogs();
 });
 
-$("btnLogsNext").addEventListener("click", () => {
+on("btnLogsNext", "click", () => {
   if (state.logs.page >= state.logs.totalPages) return;
   state.logs.page += 1;
   loadLogs();
