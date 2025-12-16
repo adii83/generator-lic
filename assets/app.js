@@ -278,7 +278,10 @@ function renderLicenseCards(items) {
     const status = safeStr(lic.status);
     const notesRaw = safeStr(lic.notes);
     const notes = notesRaw ? notesRaw.slice(0, 80) : "—";
-    const device = safeStr(lic.device_id) || "-";
+    const deviceRaw = safeStr(lic.device_id);
+    const maskedDevice = deviceRaw
+      ? `${deviceRaw.slice(0, 6)}••••${deviceRaw.slice(-4)}`
+      : "-";
     const activated = shortTime(lic.activated_at) || "-";
 
     const el = document.createElement("div");
@@ -291,12 +294,13 @@ function renderLicenseCards(items) {
       <div class="text-sm">Plan: <b>${plan}</b></div>
       <div class="text-xs text-gray-400 truncate">${notes}</div>
       <div class="text-xs text-gray-500 leading-relaxed">
-        Device: ${device}<br/>
+        Device: ${maskedDevice}<br/>
         Activated: ${activated}
       </div>
       <div class="flex gap-2 pt-2">
         <button class="btn-amber flex-1" onclick="resetLicense(${JSON.stringify(key)})">Reset</button>
         <button class="btn-red flex-1" onclick="banLicense(${JSON.stringify(key)})">Ban</button>
+        <button class="btn-glass flex-1" onclick="deleteLicense(${JSON.stringify(key)})">Delete</button>
       </div>
     `;
     box.appendChild(el);
@@ -319,6 +323,27 @@ async function performLicenseAction(endpoint, license_key, label) {
 
 window.resetLicense = (license_key) => performLicenseAction("/api/reset", license_key, "Reset");
 window.banLicense = (license_key) => performLicenseAction("/api/ban", license_key, "Ban");
+async function deleteLicense(license_key) {
+  if (!license_key) {
+    toast("License kosong");
+    return;
+  }
+  const ok = confirm(
+    `Hapus license ${license_key}?\nTindakan ini TIDAK bisa dibatalkan.`
+  );
+  if (!ok) return;
+  try {
+    await apiFetch("/api/delete", {
+      method: "POST",
+      body: { license_key },
+    });
+    toast("Delete OK ✅");
+    loadLicenses();
+  } catch (e) {
+    toast(`Delete gagal ❌: ${e.message}`);
+  }
+}
+window.deleteLicense = deleteLicense;
 
 renderLicenseCards([]);
 
@@ -380,9 +405,9 @@ function renderLicenses(items) {
       <td class="px-4 py-3 text-gray-300">${activated || "-"}</td>
       <td class="px-4 py-3">
         <div class="flex gap-2 flex-wrap">
-          <button data-act="reset" class="px-3 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-xs font-semibold">Reset</button>
-          <button data-act="ban" class="px-3 py-1.5 rounded-xl bg-red-600 hover:bg-red-500 text-xs font-semibold">Ban</button>
-          <button data-act="delete" class="px-3 py-1.5 rounded-xl glass hover:bg-white/10 text-xs font-semibold">Delete</button>
+          <button data-act="reset" class="btn-amber text-xs px-3 py-1.5">Reset</button>
+          <button data-act="ban" class="btn-red text-xs px-3 py-1.5">Ban</button>
+          <button data-act="delete" class="btn-glass text-xs px-3 py-1.5">Delete</button>
         </div>
       </td>
     `;
@@ -396,44 +421,15 @@ function renderLicenses(items) {
       btn.addEventListener("click", async () => {
         const act = btn.getAttribute("data-act");
         if (act === "reset") {
-          try {
-            await apiFetch("/api/reset", {
-              method: "POST",
-              body: { license_key: key },
-            });
-            toast("Reset OK ✅");
-            loadLicenses();
-          } catch (e) {
-            toast(`Reset gagal ❌: ${e.message}`);
-          }
+          await performLicenseAction("/api/reset", key, "Reset");
+          return;
         }
         if (act === "ban") {
-          try {
-            await apiFetch("/api/ban", {
-              method: "POST",
-              body: { license_key: key },
-            });
-            toast("Ban OK ✅");
-            loadLicenses();
-          } catch (e) {
-            toast(`Ban gagal ❌: ${e.message}`);
-          }
+          await performLicenseAction("/api/ban", key, "Ban");
+          return;
         }
         if (act === "delete") {
-          const ok = confirm(
-            `Yakin hapus license?\n\n${key}\n\nTidak bisa dibatalkan.`
-          );
-          if (!ok) return;
-          try {
-            await apiFetch("/api/delete", {
-              method: "POST",
-              body: { license_key: key },
-            });
-            toast("Delete OK ✅");
-            loadLicenses();
-          } catch (e) {
-            toast(`Delete gagal ❌: ${e.message}`);
-          }
+          await deleteLicense(key);
         }
       });
     });
