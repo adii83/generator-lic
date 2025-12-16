@@ -496,7 +496,7 @@ function renderLogs(items) {
     const device = safeStr(log.device_id);
     const action = safeStr(log.action);
     const reason = safeStr(log.reason);
-    const time = shortTime(log.time);
+    const time = shortTime(log.time || log.timestamp);
 
     const tr = document.createElement("tr");
     tr.className = `border-b border-white/5 hover:bg-white/5`;

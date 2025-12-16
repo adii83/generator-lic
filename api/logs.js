@@ -20,7 +20,7 @@ export default async function handler(req, res) {
 
     const query = {
       select: "*",
-      order: "time.desc",
+      order: "timestamp.desc",
       limit: String(pageSize),
       offset: String((page - 1) * pageSize),
     };
@@ -68,9 +68,15 @@ export default async function handler(req, res) {
       ? Math.max(1, Math.ceil(totalCount / pageSize))
       : 1;
 
+    const rows = Array.isArray(json) ? json : [];
+    const data = rows.map((row) => ({
+      ...row,
+      time: row.time ?? row.timestamp ?? row.created_at ?? null,
+    }));
+
     return res.status(200).json({
       ok: true,
-      data: json || [],
+      data,
       page,
       pageSize,
       totalCount,
