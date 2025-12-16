@@ -454,13 +454,11 @@ async function loadLogs() {
   const search = $("logsSearch").value.trim();
   const action = $("logsAction").value;
   const reason = $("logsReason").value;
-  const result = $("logsResult").value;
 
   const qs = new URLSearchParams({
     search,
     action,
     reason,
-    result,
     page: String(state.logs.page),
     pageSize: String(state.logs.pageSize),
   });
@@ -560,6 +558,22 @@ function renderLogs(items) {
 $("btnLogsSearch").addEventListener("click", () => {
   state.logs.page = 1;
   loadLogs();
+});
+
+$("btnClearLogs").addEventListener("click", async () => {
+  const ok = confirm(
+    "HAPUS SEMUA LOG?\n\nTindakan ini TIDAK bisa dibatalkan."
+  );
+  if (!ok) return;
+
+  try {
+    await apiFetch("/api/logs-clear", { method: "POST" });
+    toast("Semua log dihapus ✅");
+    state.logs.page = 1;
+    loadLogs();
+  } catch (e) {
+    toast(`Gagal hapus log ❌: ${e.message}`);
+  }
 });
 
 $("btnLogsPrev").addEventListener("click", () => {
