@@ -300,11 +300,29 @@ function renderLicenseCards(items) {
         Activated: ${activated}
       </div>
       <div class="flex gap-2 pt-2">
-        <button class="btn-amber flex-1" onclick="resetLicense(${JSON.stringify(key)})">Reset</button>
-        <button class="btn-red flex-1" onclick="banLicense(${JSON.stringify(key)})">Ban</button>
-        <button class="btn-glass flex-1" onclick="deleteLicense(${JSON.stringify(key)})">Delete</button>
+        <button class="btn-amber flex-1" data-card-act="reset">Reset</button>
+        <button class="btn-red flex-1" data-card-act="ban">Ban</button>
+        <button class="btn-glass flex-1" data-card-act="delete">Delete</button>
       </div>
     `;
+
+    el.querySelectorAll("[data-card-act]").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const act = btn.getAttribute("data-card-act");
+        if (act === "reset") {
+          await performLicenseAction("/api/reset", key, "Reset");
+          return;
+        }
+        if (act === "ban") {
+          await performLicenseAction("/api/ban", key, "Ban");
+          return;
+        }
+        if (act === "delete") {
+          await deleteLicense(key);
+        }
+      });
+    });
+
     box.appendChild(el);
   });
 }

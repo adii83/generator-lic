@@ -72,7 +72,7 @@ export default async function handler(req, res) {
       if (sbRes.status === 200) break;
     }
 
-    if (!sbRes || sbRes.status !== 200) {
+    if (!sbRes || ![200, 206].includes(sbRes.status)) {
       const detail = attemptInfo
         .map((info) => `${info.endpoint} -> ${info.status} ${info.body}`)
         .join(" | ");
