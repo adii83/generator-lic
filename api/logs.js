@@ -1,6 +1,11 @@
 import { requireAdmin } from "./_auth.js";
 import { sbFetch } from "./_supabase.js";
 
+const LOG_ENDPOINTS = [
+  "/rest/v1/activations_log",
+  "/rest/v1/activtions_log",
+];
+
 export default async function handler(req, res) {
   try {
     requireAdmin(req);
@@ -43,18 +48,38 @@ export default async function handler(req, res) {
     if (result === "Failed") query.action = "eq.activate_failed";
     if (result === "Banned") query.reason = "eq.banned";
 
-    const {
-      res: sbRes,
-      text,
-      json,
-    } = await sbFetch("/rest/v1/activations_log", {
-      method: "GET",
-      query,
-      extraHeaders: { Prefer: "count=exact" },
-    });
+    let sbRes = null;
+    let text = "";
+    let json = null;
+    const attemptInfo = [];
 
-    if (sbRes.status !== 200)
-      return res.status(500).json({ error: "Load logs failed", detail: text });
+    for (const endpoint of LOG_ENDPOINTS) {
+      const attempt = await sbFetch(endpoint, {
+        method: "GET",
+        query,
+        extraHeaders: { Prefer: "count=exact" },
+      });
+      attemptInfo.push({
+        endpoint,
+        status: attempt.res.status,
+        body: attempt.text,
+      });
+
+      sbRes = attempt.res;
+      text = attempt.text;
+      json = attempt.json;
+
+      if (sbRes.status === 200) break;
+    }
+
+    if (!sbRes || sbRes.status !== 200) {
+      const detail = attemptInfo
+        .map((info) => `${info.endpoint} -> ${info.status} ${info.body}`)
+        .join(" | ");
+      return res
+        .status(500)
+        .json({ error: "Load logs failed", detail: detail || text });
+    }
 
     // parse Content-Range "0-24/123"
     const contentRange = sbRes.headers.get("content-range") || "";

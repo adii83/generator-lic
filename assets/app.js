@@ -45,8 +45,10 @@ async function apiFetch(url, { method = "GET", body = null } = {}) {
   } catch {}
 
   if (!res.ok) {
-    const msg = json && json.error ? json.error : text;
-    throw new Error(msg || `Request failed (${res.status})`);
+    const base = json && json.error ? json.error : text;
+    const detail = json && json.detail ? json.detail : null;
+    const msg = base || `Request failed (${res.status})`;
+    throw new Error(detail ? `${msg} (${detail})` : msg);
   }
   return json;
 }
