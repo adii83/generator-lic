@@ -5,7 +5,10 @@ const LOG_ENDPOINTS = [
   "/rest/v1/activations_log",
   "/rest/v1/activtions_log",
 ];
-const SUCCESS_STATUSES = new Set([200, 206]);
+function isSuccess(status) {
+  const code = Number(status);
+  return Number.isFinite(code) && code >= 200 && code < 300;
+}
 
 export default async function handler(req, res) {
   try {
@@ -70,10 +73,10 @@ export default async function handler(req, res) {
       text = attempt.text;
       json = attempt.json;
 
-      if (SUCCESS_STATUSES.has(sbRes.status)) break;
+      if (isSuccess(sbRes.status)) break;
     }
 
-    if (!sbRes || !SUCCESS_STATUSES.has(sbRes.status)) {
+    if (!sbRes || !isSuccess(sbRes.status)) {
       const detail = attemptInfo
         .map((info) => `${info.endpoint} -> ${info.status} ${info.body}`)
         .join(" | ");
