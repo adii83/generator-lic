@@ -20,7 +20,7 @@ export default async function handler(req, res) {
 
     const query = {
       select: "*",
-      order: "timestamp.desc",
+      order: "time.desc",
       limit: String(pageSize),
       offset: String((page - 1) * pageSize),
     };
