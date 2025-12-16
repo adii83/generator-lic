@@ -5,6 +5,7 @@ const LOG_ENDPOINTS = [
   "/rest/v1/activations_log",
   "/rest/v1/activtions_log",
 ];
+const SUCCESS_STATUSES = new Set([200, 206]);
 
 export default async function handler(req, res) {
   try {
@@ -69,10 +70,10 @@ export default async function handler(req, res) {
       text = attempt.text;
       json = attempt.json;
 
-      if (sbRes.status === 200) break;
+      if (SUCCESS_STATUSES.has(sbRes.status)) break;
     }
 
-    if (!sbRes || ![200, 206].includes(sbRes.status)) {
+    if (!sbRes || !SUCCESS_STATUSES.has(sbRes.status)) {
       const detail = attemptInfo
         .map((info) => `${info.endpoint} -> ${info.status} ${info.body}`)
         .join(" | ");

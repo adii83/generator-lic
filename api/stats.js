@@ -5,12 +5,14 @@ export default async function handler(req, res) {
   try {
     requireAdmin(req);
 
-    const { json: data } = await sbFetch("/rest/v1/licenses", {
+    const { json } = await sbFetch("/rest/v1/licenses", {
       query: { select: "status" },
+      extraHeaders: { Prefer: "count=none" },
     });
 
+    const rows = Array.isArray(json) ? json : [];
     const stats = { active: 0, unused: 0, banned: 0 };
-    (data || []).forEach((l) => {
+    rows.forEach((l) => {
       if (l.status === "active") stats.active++;
       else if (l.status === "banned") stats.banned++;
       else stats.unused++;
@@ -21,9 +23,9 @@ export default async function handler(req, res) {
       active: stats.active,
       unused: stats.unused,
       banned: stats.banned,
-      total: data.length,
+      total: rows.length,
     });
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: e.message || "Stats failed" });
   }
 }
