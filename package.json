@@ -1,5 +1,8 @@
 {
   "name": "gamehub-admin-web",
   "private": true,
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "dependencies": {
+    "nodemailer": "^6.9.11"
+  }
 }

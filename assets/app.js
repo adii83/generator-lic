@@ -229,6 +229,31 @@ on("btnQuickBan", "click", async () => {
   }
 });
 
+on("btnSendEmail", "click", async () => {
+  const emailInput = $("emailTarget");
+  const keyInput = $("emailLicense");
+  const msg = $("emailMsg");
+  const to = emailInput ? emailInput.value.trim() : "";
+  const license_key = keyInput ? keyInput.value.trim() : "";
+  if (!to || !license_key) {
+    toast("Email dan license wajib diisi");
+    return;
+  }
+
+  if (msg) msg.textContent = "Mengirim email…";
+  try {
+    await apiFetch("/api/email", {
+      method: "POST",
+      body: { to, license_key },
+    });
+    if (msg) msg.textContent = "Email terkirim ✅";
+    toast("Email terkirim ✅");
+  } catch (e) {
+    if (msg) msg.textContent = `Gagal: ${e.message}`;
+    toast(`Email gagal ❌: ${e.message}`);
+  }
+});
+
 renderOutput();
 
 // ====== Dashboard Stats ======
