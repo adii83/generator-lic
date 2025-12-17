@@ -207,28 +207,6 @@ on("btnExportCsv", "click", () => {
 });
 
 // Quick actions
-on("btnQuickReset", "click", async () => {
-  const license_key = $("quickKey").value.trim();
-  if (!license_key) return toast("Isi license_key");
-  try {
-    await apiFetch("/api/reset", { method: "POST", body: { license_key } });
-    toast("Reset OK ✅");
-  } catch (e) {
-    toast(`Reset gagal ❌: ${e.message}`);
-  }
-});
-
-on("btnQuickBan", "click", async () => {
-  const license_key = $("quickKey").value.trim();
-  if (!license_key) return toast("Isi license_key");
-  try {
-    await apiFetch("/api/ban", { method: "POST", body: { license_key } });
-    toast("Ban OK ✅");
-  } catch (e) {
-    toast(`Ban gagal ❌: ${e.message}`);
-  }
-});
-
 on("btnSendEmail", "click", async () => {
   const emailInput = $("emailTarget");
   const keyInput = $("emailLicense");
