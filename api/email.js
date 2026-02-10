@@ -5,7 +5,7 @@ const DEFAULT_SUBJECT = "GameHub";
 const DOWNLOAD_LINK = "https://drive.google.com/drive/folders/1gtKMZ-BgAIBhJKbiRMPWDFPlVKOEB9Jb?usp=drive_link";
 const TUTORIAL_LINK = "https://youtu.be/9ODcICeD9ow";
 const SUPPORT_SHOPEE = "Chat Toko GameHub di Shopee";
-const SUPPORT_WHATSAPP = "0823-2602-6944";
+const SUPPORT_WHATSAPP = "0815-1118-1559";
 
 function assertEnv(name) {
   const value = process.env[name];
