@@ -4,6 +4,7 @@ import { requireAdmin } from "./_auth.js";
 const DEFAULT_SUBJECT = "GameHub";
 const DOWNLOAD_LINK = "https://drive.google.com/drive/folders/1gtKMZ-BgAIBhJKbiRMPWDFPlVKOEB9Jb?usp=drive_link";
 const TUTORIAL_LINK = "https://youtu.be/n76abNihokg";
+const WHATSAPP_CHANNEL = "https://whatsapp.com/channel/0029VbBkrFc42DcdYie4Rb1M";
 const SUPPORT_SHOPEE = "Chat Toko GameHub di Shopee";
 const SUPPORT_WHATSAPP = "0815-1118-1559";
 
@@ -49,6 +50,9 @@ function buildEmailText(licenseKey) {
     "🎬 Link Tutorial Penggunaan GameHub:",
     TUTORIAL_LINK,
     "(Tonton panduan ini sampai selesai untuk memastikan proses instalasi dan penggunaan berjalan lancar tanpa kendala)",
+    "",
+    "💬Join Saluran Whatshapp Untuk Info Update Terbaru",
+    WHATSAPP_CHANNEL,
     "",
     "📌 Penting:",
     "Untuk pengalaman terbaik dan menghindari masalah, kami menyarankan Anda menonton tutorial tersebut hingga tuntas sebelum instalasi dan penggunaan.",
