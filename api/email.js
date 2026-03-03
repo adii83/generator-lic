@@ -51,7 +51,7 @@ function buildEmailText(licenseKey) {
     TUTORIAL_LINK,
     "(Tonton panduan ini sampai selesai untuk memastikan proses instalasi dan penggunaan berjalan lancar tanpa kendala)",
     "",
-    "💬Join Saluran Whatshapp Untuk Info Update Terbaru",
+    "💬 Join Saluran WhatsApp Untuk Info Update Terbaru:",
     WHATSAPP_CHANNEL,
     "",
     "📌 Penting:",
@@ -94,6 +94,9 @@ function buildEmailHtml(licenseKey) {
     p(
       "(Tonton panduan ini sampai selesai untuk memastikan proses instalasi dan penggunaan berjalan lancar tanpa kendala)"
     ),
+    `<p style="margin:8px 0;line-height:1.5;font-size:14px;">💬 Join Saluran WhatsApp Untuk Info Update Terbaru:<br/>${link(
+      WHATSAPP_CHANNEL
+    )}</p>`,
     p("📌 Penting:"),
     p(
       "Untuk pengalaman terbaik dan menghindari masalah, kami menyarankan Anda menonton tutorial tersebut hingga tuntas sebelum instalasi dan penggunaan."
