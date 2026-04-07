@@ -3,7 +3,7 @@ import { requireAdmin } from "./_auth.js";
 
 const DEFAULT_SUBJECT = "GameHub";
 const DOWNLOAD_LINK =
-  "https://drive.google.com/drive/folders/1gtKMZ-BgAIBhJKbiRMPWDFPlVKOEB9Jb?usp=drive_link";
+  "https://drive.google.com/file/d/18gwritxgx4QfrU4rmZ1OlOtER6UivAxZ/view?usp=drive_link";
 const TUTORIAL_LINK = "https://youtu.be/n76abNihokg";
 const DISCORD_CHANNEL = "https://discord.gg/PjYYT6hV";
 const SUPPORT_SHOPEE = "Chat Toko GameHub di Shopee";
