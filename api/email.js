@@ -1,7 +1,8 @@
 import nodemailer from "nodemailer";
 import { requireAdmin } from "./_auth.js";
 
-const DEFAULT_SUBJECT = "GameHub";
+const DEFAULT_SUBJECT = "NexaPlay";
+const DEFAULT_FROM = "NexaPlay ID <nexaplayid@gmail.com>";
 const DOWNLOAD_LINK =
   "https://drive.google.com/file/d/18gwritxgx4QfrU4rmZ1OlOtER6UivAxZ/view?usp=drive_link";
 const TUTORIAL_LINK = "https://youtu.be/n76abNihokg";
@@ -135,7 +136,7 @@ export default async function handler(req, res) {
     const text = buildEmailText(license_key);
     const html = buildEmailHtml(license_key);
     const subject = process.env.SMTP_SUBJECT || DEFAULT_SUBJECT;
-    const from = process.env.SMTP_FROM || process.env.SMTP_USER;
+    const from = process.env.SMTP_FROM || DEFAULT_FROM;
 
     await transporter.sendMail({
       from,
