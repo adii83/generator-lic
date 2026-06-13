@@ -3,8 +3,8 @@ import { requireAdmin } from "./_auth.js";
 import { sbFetch } from "./_supabase.js";
 
 function generateLicenseKey({
-  prefix = "GHUB",
-  blocks = 3,
+  prefix = "NXP",
+  blocks = 4,
   blockLen = 4,
 } = {}) {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
