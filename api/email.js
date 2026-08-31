@@ -35,36 +35,43 @@ function createTransporter() {
   });
 }
 
-function buildEmailText(licenseKey) {
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+export function buildEmailText(licenseKey) {
   return [
-    "Terima kasih telah berbelanja di NexaPlay! ðŸŽ‰",
-    "Kami sangat menghargai kepercayaan yang Anda berikan.",
+    "Terima kasih telah berbelanja di NexaPlay! 🎉",
+    "Kami sangat menghargai kepercayaan Anda.",
     "",
-    "LISENSI KEY :",
+    "🔑 LICENSE KEY",
     licenseKey,
     "",
-    "Sebagai bagian dari pembelian Anda, berikut akses dan panduan penting untuk memulai:",
+    "Simpan license key ini. Jangan bagikan kepada orang lain.",
     "",
-    "ðŸ”— Link Download Aplikasi NexaPlay:",
+    "🔗 DOWNLOAD NEXAPLAY",
     DOWNLOAD_LINK,
-    "(Silakan klik tautan di atas untuk mengunduh aplikasi)",
     "",
-    "ðŸŽ¬ Link Tutorial Penggunaan NexaPlay:",
+    "🎬 TUTORIAL PENGGUNAAN",
     TUTORIAL_LINK,
-    "(Tonton panduan ini sampai selesai untuk memastikan proses instalasi dan penggunaan berjalan lancar tanpa kendala)",
+    "Tonton tutorial sampai selesai sebelum instalasi dan penggunaan.",
     "",
-    "ðŸ’¬ Join Saluran Discord Untuk Info Update Terbaru:",
-    DISCORD_CHANNEL,
+    "💬 INFO UPDATE TERBARU",
+    `Discord: ${DISCORD_CHANNEL}`,
     "",
-    "ðŸ“Œ Penting:",
-    "Untuk pengalaman terbaik dan menghindari masalah, kami menyarankan Anda menonton tutorial tersebut hingga tuntas sebelum instalasi dan penggunaan.",
+    "📌 PENTING",
+    "Ikuti tutorial hingga tuntas agar proses instalasi dan penggunaan berjalan lancar.",
     "",
-    "ðŸ’¬ Butuh Bantuan?",
-    "Jika ada pertanyaan atau menemui kendala setelah menonton tutorial, hubungi tim dukungan kami melalui:",
-    `ðŸ’¬ ${SUPPORT_SHOPEE}`,
-    `ðŸ“ž WhatsApp Admin: ${SUPPORT_WHATSAPP} (Fast Respon)`,
+    "🛟 BUTUH BANTUAN?",
+    SUPPORT_SHOPEE,
+    `WhatsApp Admin: ${SUPPORT_WHATSAPP} (Fast Response)`,
     "",
-    "Kami berharap Anda menikmati pengalaman gaming yang lebih menyenangkan dengan NexaPlay! ðŸ•¹ï¸",
+    "Semoga pengalaman gaming Anda bersama NexaPlay makin menyenangkan! 🕹️",
     "",
     "Salam hangat,",
     "Tim NexaPlay",
@@ -72,50 +79,78 @@ function buildEmailText(licenseKey) {
   ].join("\n");
 }
 
-function buildEmailHtml(licenseKey) {
-  const p = (content) =>
-    `<p style="margin:6px 0;line-height:1.5;font-size:14px;">${content}</p>`;
-  const link = (url, color = "#6366f1") =>
-    `<a href="${url}" style="color:${color};text-decoration:none;">${url}</a>`;
+export function buildEmailHtml(licenseKey) {
+  const safeLicenseKey = escapeHtml(licenseKey);
   const waLink = `https://wa.me/${SUPPORT_WHATSAPP.replace(/[^0-9]/g, "")}`;
+  const button = (label, url, color) =>
+    `<a href="${url}" style="display:inline-block;background:${color};color:#ffffff;text-decoration:none;font-size:14px;font-weight:700;line-height:20px;padding:12px 18px;border-radius:10px;">${label}</a>`;
 
-  return [
-    p("Terima kasih telah berbelanja di NexaPlay! ðŸŽ‰"),
-    p("Kami sangat menghargai kepercayaan yang Anda berikan."),
-    `<p style="margin:8px 0;line-height:1.5;font-size:15px;"><strong>LISENSI KEY :</strong><br/><span style="font-size:20px;font-weight:700;letter-spacing:1px;">${licenseKey}</span></p>`,
-    p(
-      "Sebagai bagian dari pembelian Anda, berikut akses dan panduan penting untuk memulai:"
-    ),
-    `<p style="margin:8px 0;line-height:1.5;font-size:14px;">ðŸ”— Link Download Aplikasi NexaPlay:<br/>${link(
-      DOWNLOAD_LINK
-    )}</p>`,
-    p("(Silakan klik tautan di atas untuk mengunduh aplikasi)"),
-    `<p style="margin:8px 0;line-height:1.5;font-size:14px;">ðŸŽ¬ Link Tutorial Penggunaan NexaPlay:<br/>${link(
-      TUTORIAL_LINK
-    )}</p>`,
-    p(
-      "(Tonton panduan ini sampai selesai untuk memastikan proses instalasi dan penggunaan berjalan lancar tanpa kendala)"
-    ),
-    `<p style="margin:8px 0;line-height:1.5;font-size:14px;">ðŸ’¬ Join Saluran Discord Untuk Info Update Terbaru:<br/>${link(
-      DISCORD_CHANNEL
-    )}</p>`,
-    p("ðŸ“Œ Penting:"),
-    p(
-      "Untuk pengalaman terbaik dan menghindari masalah, kami menyarankan Anda menonton tutorial tersebut hingga tuntas sebelum instalasi dan penggunaan."
-    ),
-    p("ðŸ’¬ Butuh Bantuan?"),
-    p(
-      "Jika ada pertanyaan atau menemui kendala setelah menonton tutorial, hubungi tim dukungan kami melalui:"
-    ),
-    p(`ðŸ’¬ ${SUPPORT_SHOPEE}`),
-    `<p style="margin:6px 0;line-height:1.5;font-size:14px;">ðŸ“ž WhatsApp Admin: <a href="${waLink}" style="color:#10b981;text-decoration:none;">${SUPPORT_WHATSAPP}</a> (Fast Respon)</p>`,
-    p(
-      "Kami berharap Anda menikmati pengalaman gaming yang lebih menyenangkan dengan NexaPlay! ðŸ•¹ï¸"
-    ),
-    p("Salam hangat,"),
-    p("Tim NexaPlay"),
-    p("Game Your Way"),
-  ].join("");
+  return `<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>NexaPlay</title>
+  </head>
+  <body style="margin:0;padding:0;background:#f3f4f6;color:#111827;font-family:Arial,Helvetica,sans-serif;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:#f3f4f6;">
+      <tr>
+        <td align="center" style="padding:24px 12px;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;max-width:600px;background:#ffffff;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;">
+            <tr>
+              <td style="padding:28px 28px 22px;background:#111827;color:#ffffff;">
+                <div style="font-size:12px;font-weight:700;letter-spacing:1.5px;color:#a78bfa;text-transform:uppercase;">NexaPlay</div>
+                <h1 style="margin:8px 0 6px;font-size:24px;line-height:32px;">Pesanan Anda siap 🎉</h1>
+                <p style="margin:0;color:#d1d5db;font-size:14px;line-height:22px;">Terima kasih telah berbelanja di NexaPlay.</p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:28px;">
+                <p style="margin:0 0 18px;font-size:15px;line-height:24px;color:#374151;">Berikut license key dan panduan untuk mulai menggunakan NexaPlay.</p>
+
+                <div style="margin:0 0 24px;padding:18px;background:#f5f3ff;border:1px solid #ddd6fe;border-radius:12px;text-align:center;">
+                  <div style="margin-bottom:8px;font-size:12px;font-weight:700;letter-spacing:1px;color:#6d28d9;">🔑 LICENSE KEY</div>
+                  <div style="font-family:Consolas,Monaco,monospace;font-size:20px;font-weight:700;line-height:28px;letter-spacing:1px;color:#111827;word-break:break-all;">${safeLicenseKey}</div>
+                  <div style="margin-top:8px;font-size:12px;line-height:18px;color:#6b7280;">Simpan key ini dan jangan bagikan kepada orang lain.</div>
+                </div>
+
+                <h2 style="margin:0 0 10px;font-size:17px;line-height:24px;color:#111827;">🔗 Download aplikasi</h2>
+                <p style="margin:0 0 12px;font-size:14px;line-height:22px;color:#4b5563;">Unduh aplikasi NexaPlay melalui tombol berikut.</p>
+                <div style="margin:0 0 24px;">${button("Download NexaPlay", DOWNLOAD_LINK, "#7c3aed")}</div>
+
+                <h2 style="margin:0 0 10px;font-size:17px;line-height:24px;color:#111827;">🎬 Tutorial penggunaan</h2>
+                <p style="margin:0 0 12px;font-size:14px;line-height:22px;color:#4b5563;">Tonton tutorial sampai selesai agar instalasi dan penggunaan berjalan lancar.</p>
+                <div style="margin:0 0 24px;">${button("Lihat Tutorial", TUTORIAL_LINK, "#2563eb")}</div>
+
+                <h2 style="margin:0 0 10px;font-size:17px;line-height:24px;color:#111827;">💬 Info update terbaru</h2>
+                <p style="margin:0 0 12px;font-size:14px;line-height:22px;color:#4b5563;">Gabung ke saluran Discord NexaPlay untuk menerima informasi terbaru.</p>
+                <div style="margin:0 0 24px;">${button("Gabung Discord", DISCORD_CHANNEL, "#4f46e5")}</div>
+
+                <div style="margin:0 0 24px;padding:16px;background:#fffbeb;border:1px solid #fde68a;border-radius:12px;">
+                  <div style="margin-bottom:6px;font-size:14px;font-weight:700;color:#92400e;">📌 Penting</div>
+                  <p style="margin:0;font-size:13px;line-height:21px;color:#78350f;">Ikuti tutorial hingga tuntas sebelum instalasi dan penggunaan untuk menghindari kendala.</p>
+                </div>
+
+                <h2 style="margin:0 0 10px;font-size:17px;line-height:24px;color:#111827;">🛟 Butuh bantuan?</h2>
+                <p style="margin:0 0 6px;font-size:14px;line-height:22px;color:#4b5563;">${SUPPORT_SHOPEE}</p>
+                <p style="margin:0 0 12px;font-size:14px;line-height:22px;color:#4b5563;">WhatsApp Admin: <strong>${SUPPORT_WHATSAPP}</strong> (Fast Response)</p>
+                <div style="margin:0 0 26px;">${button("Hubungi WhatsApp", waLink, "#059669")}</div>
+
+                <p style="margin:0 0 18px;font-size:14px;line-height:22px;color:#374151;">Semoga pengalaman gaming Anda bersama NexaPlay makin menyenangkan! 🕹️</p>
+                <p style="margin:0;font-size:14px;line-height:22px;color:#374151;">Salam hangat,<br /><strong>Tim NexaPlay</strong><br /><span style="color:#7c3aed;">Game Your Way</span></p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:16px 28px;background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;font-size:11px;line-height:18px;color:#9ca3af;">
+                Email ini dikirim terkait pembelian lisensi NexaPlay Anda.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`;
 }
 
 export default async function handler(req, res) {
