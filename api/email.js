@@ -7,7 +7,7 @@ const DOWNLOAD_LINK =
   "https://drive.google.com/file/d/18gwritxgx4QfrU4rmZ1OlOtER6UivAxZ/view?usp=drive_link";
 const TUTORIAL_LINK = "https://youtu.be/n76abNihokg";
 const DISCORD_CHANNEL = "https://discord.gg/PjYYT6hV";
-const SUPPORT_SHOPEE = "Chat Toko GameHub di Shopee";
+const SUPPORT_SHOPEE = "Chat Toko NexaPlay di Shopee";
 const SUPPORT_WHATSAPP = "0815-1118-1559";
 
 function assertEnv(name) {
@@ -37,7 +37,7 @@ function createTransporter() {
 
 function buildEmailText(licenseKey) {
   return [
-    "Terima kasih telah berbelanja di GameHub! ðŸŽ‰",
+    "Terima kasih telah berbelanja di NexaPlay! ðŸŽ‰",
     "Kami sangat menghargai kepercayaan yang Anda berikan.",
     "",
     "LISENSI KEY :",
@@ -45,11 +45,11 @@ function buildEmailText(licenseKey) {
     "",
     "Sebagai bagian dari pembelian Anda, berikut akses dan panduan penting untuk memulai:",
     "",
-    "ðŸ”— Link Download Aplikasi GameHub:",
+    "ðŸ”— Link Download Aplikasi NexaPlay:",
     DOWNLOAD_LINK,
     "(Silakan klik tautan di atas untuk mengunduh aplikasi)",
     "",
-    "ðŸŽ¬ Link Tutorial Penggunaan GameHub:",
+    "ðŸŽ¬ Link Tutorial Penggunaan NexaPlay:",
     TUTORIAL_LINK,
     "(Tonton panduan ini sampai selesai untuk memastikan proses instalasi dan penggunaan berjalan lancar tanpa kendala)",
     "",
@@ -64,10 +64,10 @@ function buildEmailText(licenseKey) {
     `ðŸ’¬ ${SUPPORT_SHOPEE}`,
     `ðŸ“ž WhatsApp Admin: ${SUPPORT_WHATSAPP} (Fast Respon)`,
     "",
-    "Kami berharap Anda menikmati pengalaman gaming yang lebih menyenangkan dengan GameHub! ðŸ•¹ï¸",
+    "Kami berharap Anda menikmati pengalaman gaming yang lebih menyenangkan dengan NexaPlay! ðŸ•¹ï¸",
     "",
     "Salam hangat,",
-    "Tim GameHub",
+    "Tim NexaPlay",
     "Game Your Way",
   ].join("\n");
 }
@@ -80,17 +80,17 @@ function buildEmailHtml(licenseKey) {
   const waLink = `https://wa.me/${SUPPORT_WHATSAPP.replace(/[^0-9]/g, "")}`;
 
   return [
-    p("Terima kasih telah berbelanja di GameHub! ðŸŽ‰"),
+    p("Terima kasih telah berbelanja di NexaPlay! ðŸŽ‰"),
     p("Kami sangat menghargai kepercayaan yang Anda berikan."),
     `<p style="margin:8px 0;line-height:1.5;font-size:15px;"><strong>LISENSI KEY :</strong><br/><span style="font-size:20px;font-weight:700;letter-spacing:1px;">${licenseKey}</span></p>`,
     p(
       "Sebagai bagian dari pembelian Anda, berikut akses dan panduan penting untuk memulai:"
     ),
-    `<p style="margin:8px 0;line-height:1.5;font-size:14px;">ðŸ”— Link Download Aplikasi GameHub:<br/>${link(
+    `<p style="margin:8px 0;line-height:1.5;font-size:14px;">ðŸ”— Link Download Aplikasi NexaPlay:<br/>${link(
       DOWNLOAD_LINK
     )}</p>`,
     p("(Silakan klik tautan di atas untuk mengunduh aplikasi)"),
-    `<p style="margin:8px 0;line-height:1.5;font-size:14px;">ðŸŽ¬ Link Tutorial Penggunaan GameHub:<br/>${link(
+    `<p style="margin:8px 0;line-height:1.5;font-size:14px;">ðŸŽ¬ Link Tutorial Penggunaan NexaPlay:<br/>${link(
       TUTORIAL_LINK
     )}</p>`,
     p(
@@ -110,10 +110,10 @@ function buildEmailHtml(licenseKey) {
     p(`ðŸ’¬ ${SUPPORT_SHOPEE}`),
     `<p style="margin:6px 0;line-height:1.5;font-size:14px;">ðŸ“ž WhatsApp Admin: <a href="${waLink}" style="color:#10b981;text-decoration:none;">${SUPPORT_WHATSAPP}</a> (Fast Respon)</p>`,
     p(
-      "Kami berharap Anda menikmati pengalaman gaming yang lebih menyenangkan dengan GameHub! ðŸ•¹ï¸"
+      "Kami berharap Anda menikmati pengalaman gaming yang lebih menyenangkan dengan NexaPlay! ðŸ•¹ï¸"
     ),
     p("Salam hangat,"),
-    p("Tim GameHub"),
+    p("Tim NexaPlay"),
     p("Game Your Way"),
   ].join("");
 }
