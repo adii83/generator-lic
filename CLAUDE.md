@@ -10,7 +10,7 @@ Small Vercel-style admin application with no frontend build pipeline:
 - `assets/app.js` is one vanilla-browser JavaScript module for UI state, DOM rendering, events, downloads, and API calls.
 - `api/*.js` are Node serverless handlers. Each exports a default `(req, res)` handler.
 - Supabase REST is the persistence layer. No Supabase SDK is used.
-- `nodemailer` is the only npm dependency and powers license email delivery.
+- `resend` is the email dependency and powers license email delivery through the Resend API.
 
 ## Commands
 
@@ -32,8 +32,8 @@ Serverless handlers depend on environment variables:
 
 - `ADMIN_TOKEN` — compared with browser-supplied `X-Admin-Token` by `api/_auth.js`.
 - `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` — used by `api/_supabase.js` for direct PostgREST requests.
-- `SMTP_HOST`, `SMTP_USER`, `SMTP_PASS` — required by `api/email.js`.
-- `SMTP_PORT` defaults to `465`; `SMTP_SUBJECT` and `SMTP_FROM` are optional overrides.
+- `RESEND_API_KEY` — required by `api/email.js`; keep it server-side in Vercel environment variables.
+- Resend must verify `nexaplayid.store`; license email uses `NexaPlay <order@nexaplayid.store>` and replies go to `nexaplayid@gmail.com`.
 
 ## Architecture and Data Flow
 
@@ -57,7 +57,7 @@ Endpoint responsibilities:
 - `POST /api/reset`, `/api/ban`, `/api/delete` — mutate one license selected by `license_key`.
 - `GET /api/logs` — filters and paginates activation logs using Supabase `Content-Range` for totals. It intentionally tries both `activations_log` and legacy misspelling `activtions_log`.
 - `POST /api/logs-clear` — deletes all rows from `activations_log`.
-- `POST /api/email` — sends fixed NexaPlay license instructions through SMTP.
+- `POST /api/email` — sends fixed NexaPlay license instructions through Resend.
 
 Expected Supabase data includes `licenses` fields such as `license_key`, `plan`, `status`, `notes`, `device_id`, and `activated_at`; activation logs expose fields such as `id`, `license_key`, `device_id`, `action`, `reason`, and timestamp variants.
 

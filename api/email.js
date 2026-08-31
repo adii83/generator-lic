@@ -1,8 +1,9 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 import { requireAdmin } from "./_auth.js";
 
 export const DEFAULT_SUBJECT = "License Key NexaPlay Anda";
-const DEFAULT_FROM = "NexaPlay ID <nexaplayid@gmail.com>";
+const FROM = "NexaPlay <order@nexaplayid.store>";
+const REPLY_TO = "nexaplayid@gmail.com";
 const DOWNLOAD_LINK =
   "https://drive.google.com/file/d/18gwritxgx4QfrU4rmZ1OlOtER6UivAxZ/view?usp=drive_link";
 const TUTORIAL_LINK = "https://youtu.be/n76abNihokg";
@@ -14,25 +15,6 @@ function assertEnv(name) {
   const value = process.env[name];
   if (!value) throw new Error(`Missing ${name} env`);
   return value;
-}
-
-function createTransporter() {
-  const host = assertEnv("SMTP_HOST");
-  const portValue = process.env.SMTP_PORT || "465";
-  const port = Number(portValue);
-  const secure = port === 465;
-  const user = assertEnv("SMTP_USER");
-  const pass = assertEnv("SMTP_PASS");
-
-  return nodemailer.createTransport({
-    host,
-    port,
-    secure,
-    auth: {
-      user,
-      pass,
-    },
-  });
 }
 
 function escapeHtml(value) {
@@ -164,22 +146,28 @@ export default async function handler(req, res) {
     if (!to || !license_key) {
       return res.status(400).json({ error: "Missing to / license_key" });
     }
+    if (typeof to !== "string" || to.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) {
+      return res.status(400).json({ error: "Invalid recipient email" });
+    }
+    if (typeof license_key !== "string" || license_key.length > 200) {
+      return res.status(400).json({ error: "Invalid license_key" });
+    }
 
-    const transporter = createTransporter();
-    await transporter.verify();
-
-    const text = buildEmailText(license_key);
-    const html = buildEmailHtml(license_key);
-    const subject = process.env.SMTP_SUBJECT || DEFAULT_SUBJECT;
-    const from = process.env.SMTP_FROM || DEFAULT_FROM;
-
-    await transporter.sendMail({
-      from,
-      to,
-      subject,
-      text,
-      html,
+    const resend = new Resend(assertEnv("RESEND_API_KEY"));
+    const { error } = await resend.emails.send({
+      from: FROM,
+      to: [to],
+      replyTo: REPLY_TO,
+      subject: DEFAULT_SUBJECT,
+      text: buildEmailText(license_key),
+      html: buildEmailHtml(license_key),
     });
+
+    if (error) {
+      const providerError = new Error(error.message || "Resend failed to send email");
+      providerError.statusCode = 502;
+      throw providerError;
+    }
 
     return res.status(200).json({ ok: true });
   } catch (e) {
