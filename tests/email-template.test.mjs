@@ -51,3 +51,13 @@ test("license key di-escape sebelum masuk HTML", () => {
   assert.doesNotMatch(html, /<script>/i);
   assert.match(html, /NXP-&lt;script&gt;&amp;&quot;/);
 });
+
+test("subject default menjelaskan isi email", () => {
+  assert.equal(email.DEFAULT_SUBJECT, "License Key NexaPlay Anda");
+});
+
+test("tombol WhatsApp memakai nomor internasional", () => {
+  const html = email.buildEmailHtml("NXP-TEST");
+  assert.match(html, /https:\/\/wa\.me\/6281511181559/);
+  assert.doesNotMatch(html, /https:\/\/wa\.me\/081511181559/);
+});

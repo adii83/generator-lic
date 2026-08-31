@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import { requireAdmin } from "./_auth.js";
 
-const DEFAULT_SUBJECT = "NexaPlay";
+export const DEFAULT_SUBJECT = "License Key NexaPlay Anda";
 const DEFAULT_FROM = "NexaPlay ID <nexaplayid@gmail.com>";
 const DOWNLOAD_LINK =
   "https://drive.google.com/file/d/18gwritxgx4QfrU4rmZ1OlOtER6UivAxZ/view?usp=drive_link";
@@ -81,7 +81,7 @@ export function buildEmailText(licenseKey) {
 
 export function buildEmailHtml(licenseKey) {
   const safeLicenseKey = escapeHtml(licenseKey);
-  const waLink = `https://wa.me/${SUPPORT_WHATSAPP.replace(/[^0-9]/g, "")}`;
+  const waLink = `https://wa.me/62${SUPPORT_WHATSAPP.replace(/[^0-9]/g, "").replace(/^0/, "")}`;
   const button = (label, url, color) =>
     `<a href="${url}" style="display:inline-block;background:${color};color:#ffffff;text-decoration:none;font-size:14px;font-weight:700;line-height:20px;padding:12px 18px;border-radius:10px;">${label}</a>`;
 
