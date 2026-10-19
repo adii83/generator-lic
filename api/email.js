@@ -5,11 +5,11 @@ export const DEFAULT_SUBJECT = "License Key NexaPlay Anda";
 const FROM = "NexaPlay <order@nexaplayid.store>";
 const REPLY_TO = "nexaplayid@gmail.com";
 const DOWNLOAD_LINK =
-  "https://drive.google.com/file/d/1u0YznqGjQkcphp4JHqJBY_MRIYkUhaUe/view?usp=sharing";
-const TUTORIAL_LINK = "https://youtu.be/n76abNihokg";
+  "https://drive.google.com/file/d/1G2VosN3_rekrpjWG00DmdMmi8YCNV-Ss/view?usp=drive_link";
+const TUTORIAL_LINK = "https://youtu.be/rHAI5HvaW5I";
 const DISCORD_CHANNEL = "https://discord.gg/PjYYT6hV";
 const SUPPORT_SHOPEE = "Chat Toko NexaPlay di Shopee";
-const SUPPORT_WHATSAPP = "0815-1118-1559";
+const SUPPORT_WHATSAPP = "0851-9082-8725";
 
 function assertEnv(name) {
   const value = process.env[name];
