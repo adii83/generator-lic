@@ -5,9 +5,9 @@ export const DEFAULT_SUBJECT = "License Key NexaPlay Anda";
 const FROM = "NexaPlay <order@nexaplayid.store>";
 const REPLY_TO = "nexaplayid@gmail.com";
 const DOWNLOAD_LINK =
-  "https://drive.google.com/file/d/1vh-g7jSFXdiD0JLXIB_GAgTBgEaTDrFG/view?usp=sharing";
+  "https://drive.google.com/file/d/1qbAcSzL608MRQ0X8H7FgGCfaVE0HcACb/view?usp=sharing";
 const TUTORIAL_LINK = "https://youtu.be/rHAI5HvaW5I";
-const DISCORD_CHANNEL = "https://discord.gg/PjYYT6hV";
+const DISCORD_CHANNEL = "https://discord.gg/85EXaPK2Yd";
 const SUPPORT_SHOPEE = "Chat Toko NexaPlay di Shopee";
 const SUPPORT_WHATSAPP = "0851-9082-8725";
 
